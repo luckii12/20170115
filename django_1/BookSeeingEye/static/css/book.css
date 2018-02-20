@@ -1,0 +1,12 @@
+body{
+    padding: 70px;
+}
+
+#content > nav > div > div.navbar-header > a > img{
+    margin-top: -10px;
+    margin-bottom: 10px;
+}
+
+#content > div.low-button-group{
+    margin-bottom: 5px;
+}
