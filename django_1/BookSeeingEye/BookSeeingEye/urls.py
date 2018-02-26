@@ -15,8 +15,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.conf.urls import include, url
+from django.conf import settings
+
+SOCIAL_AUTH_URL_NAMESPACE = 'social'
+LOGIN_REDIRECT_URL='/'
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'', include('book.urls')),
+    url('', include('social_django.urls', namespace='social')), # 이 줄을 등록해주면 됩니다.
 ]

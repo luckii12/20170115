@@ -19,23 +19,22 @@ class WeekCrawler():
     bookInfo = ['Year', 'Month', 'Day', 'Rank', 'Title',
                 'ISBN', 'Writer', 'Publisher', 'Cate_A', 'Cate_B',
                 'Cate_C', 'Cate_D', 'Price', 'Review', 'SellingPoint']
+    
+    start_date = timezone.localtime().date()
+    end_date = timezone.localtime().date() + timezone.timedelta(days=1) - timezone.timedelta(seconds=1)
 
     def getDriver(self):
         try:
-            driver = webdriver.Chrome('/Users/canine/Desktop/DEV/20170115/django_1/BookSeeingEye/book/driver/chromedriver.exe')
+            driver = webdriver.Chrome('/Users/canine/Desktop/DEV/20170114/django_1/BookSeeingEye/book/driver/chromedriver.exe')
         except:
-            driver = webdriver.Chrome('/Users/canine/Desktop/DEV/20170115/django_1/BookSeeingEye/book/driver/chromedriver')
+            driver = webdriver.Chrome('/Users/canine/Desktop/DEV/20170114/django_1/BookSeeingEye/book/driver/chromedriver')
         return driver
 
     def startCrawl(self, page, driver):
-        start_date = timezone.localtime().date()
-        end_date = timezone.localtime().date() + timezone.timedelta(days=1)
-
-        if (driver == None):
+        if driver == None:
             print('driver is not found')
             return -1
-        # 일단은 all.count로 해결했는데 다른 방법이 있을련지...
-        elif (MetaData.objects.filter(crawl_date__range=(start_date, end_date)).count() >= 60):
+        elif MetaData.objects.filter(crawl_date__range=(self.start_date, self.end_date)).count() >= 1:
             print('today crawl is done')
             return -2
         else:
@@ -44,7 +43,7 @@ class WeekCrawler():
                 self.pageCrawl(pageCount, driver)
 
     def endCrawl(self, driver):
-        if (driver == None):
+        if driver == None:
             print('driver is not found')
             return -1
         else:
@@ -53,26 +52,25 @@ class WeekCrawler():
             return 0
 
     def ORM_saveBook(self, book):
-        if (book is not None):
+        if book is not None:
             # 이미 등록된 책이 있는 경우
             try:
                 # ISBN으로 검사하면 된다.
                 temp = Book.objects.get(isbn=int(book['ISBN']))
-                try:
-                    meta_temp = MetaData.objects.get(sellingPoint=book['SellingPoint'])
-                except:
-                    MetaData.objects.create(
-                        rank=book['Rank'],
-                        reviewCount=book['Review'],
-                        sellingPoint=book['SellingPoint'],
-                        book=temp
-                    )
+                MetaData.objects.create(
+                    rank=book['Rank'],
+                    reviewCount=book['Review'],
+                    sellingPoint=book['SellingPoint'],
+                    crawl_date=timezone.localtime().date(),
+                    book=temp
+                )
             # 등록된 책이 없는 경우
             except:
                 MetaData.objects.create(
                     rank=book['Rank'],
                     reviewCount=book['Review'],
                     sellingPoint=book['SellingPoint'],
+                    crawl_date=timezone.localtime(),
                     book=Book.objects.create(
                         title=book['Title'],
                         isbn=int(book['ISBN']),
@@ -82,15 +80,6 @@ class WeekCrawler():
                         pubDate=book['Year'] + '-' + book['Month'] + '-' + book['Day']
                     )
                 )
-
-
-
-    #아직 생각 중인 함수
-    def isLastDay(self, book):
-        if 0:
-            return 1
-        else:
-            return 0
 
     def pageCrawl(self, page, driver):
         if(driver == None):

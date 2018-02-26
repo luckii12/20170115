@@ -1,6 +1,7 @@
 from django.db import models
 from django.db.models import ForeignKey
 from django.utils import timezone
+from datetime import datetime
 
 class Book(models.Model):
     # 기본 정보
@@ -28,10 +29,10 @@ class MetaData(models.Model):
     sellingPoint = models.IntegerField(default=-1)
 
     # 정보 수집 날짜 자동 입력
-    crawl_date = models.DateTimeField(default=timezone.localtime())
+    crawl_date = models.DateTimeField()
 
     # 책
     book = models.ForeignKey('Book', on_delete=True)
 
     def __str__(self):
-        return str(self.crawl_date) + ' ' + str(self.book)
+        return str(self.book)

@@ -11,11 +11,13 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
       {% endblock meta %}
 
-      <title>Gentelella Alela! | {% block title %}{% endblock %}</title>
+      <title>이지스퍼블리싱 전략실</title>
 
       {% block stylesheets %}
         <!-- Bootstrap -->
-        <link href="{% static 'gentelella/vendors/bootstrap/dist/css/bootstrap.min.css' %}" rel="stylesheet">
+        {% comment %} <link href="{% static 'gentelella/vendors/bootstrap/dist/css/bootstrap.min.css' %}" rel="stylesheet"> {% endcomment %}
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
         <!-- Font Awesome -->
         <link href="{% static 'gentelella/vendors/font-awesome/css/font-awesome.min.css' %}" rel="stylesheet">
         <!-- NProgress -->
@@ -30,7 +32,8 @@
         <link href="{% static 'gentelella/vendors/jqvmap/dist/jqvmap.min.css' %}" rel="stylesheet"/>
 
         <!-- DataTables -->
-        <link href="{% static 'gentelella/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css' %}" rel="stylesheet">
+		    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css">
+        {% comment %} <link href="{% static 'gentelella/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css' %}" rel="stylesheet"> {% endcomment %}
         <link href="{% static 'gentelella/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css' %}" rel="stylesheet">
         <link href="{% static 'gentelella/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css' %}" rel="stylesheet">
         <link href="{% static 'gentelella/vendors/datatables.net-responsive-bs/css/responsive.bootstrap.min.css' %}" rel="stylesheet">
@@ -45,7 +48,6 @@
     {% block body %}
       <div class="container body">
         <div class="main_container">
-
           {% block sidebar %}
             <div class="col-md-3 left_col {% block sidebar_class %} {% endblock sidebar_class %}">
               {% include "./sidebar.html" %}
@@ -72,13 +74,15 @@
 
       {% block javascripts %}
         <!-- jQuery -->
-        <script src="{% static 'gentelella/vendors/jquery/dist/jquery.min.js' %}"></script>
+        {% comment %} <script src="{% static 'gentelella/vendors/jquery/dist/jquery.min.js' %}"></script> {% endcomment %}
+		    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <!-- Bootstrap -->
-        <script src="{% static 'gentelella/vendors/bootstrap/dist/js/bootstrap.min.js' %}"></script>
+        {% comment %} <script src="{% static 'gentelella/vendors/bootstrap/dist/js/bootstrap.min.js' %}"></script> {% endcomment %}
+		    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script> 
         <!-- FastClick -->
         <script src="{% static 'gentelella/vendors/fastclick/lib/fastclick.js' %}"></script>
         <!-- NProgress -->
-        <script src="{% static 'gentelella/vendors/nprogress/nprogress.js' %}"></script>
+        {% comment %} <script src="{% static 'gentelella/vendors/nprogress/nprogress.js' %}"></script> {% endcomment %}
         <!-- bootstrap-progressbar -->
         <script src="{% static 'gentelella/vendors/bootstrap-progressbar/bootstrap-progressbar.min.js' %}"></script>
         <!-- iCheck -->
@@ -104,10 +108,12 @@
         <script src="{% static 'gentelella/vendors/devbridge-autocomplete/dist/jquery.autocomplete.min.js' %}"></script>
         <!-- starrr -->
         <script src="{% static 'gentelella/vendors/starrr/dist/starrr.js' %}"></script>
-        
+
         <!-- Datatables -->
-        <script src="{% static 'gentelella/vendors/datatables.net/js/jquery.dataTables.min.js' %}"></script>
-        <script src="{% static 'gentelella/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
+        <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js" charset="utf-8"></script>
+        <script src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js" charset="utf-8"></script>
+        {% comment %} <script src="{% static 'gentelella/vendors/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+        <script src="{% static 'gentelella/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script> {% endcomment %}
         <script src="{% static 'gentelella/vendors/datatables.net-buttons/js/dataTables.buttons.min.js' %}"></script>
         <script src="{% static 'gentelella/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js' %}"></script>
         <script src="{% static 'gentelella/vendors/datatables.net-buttons/js/buttons.flash.min.js' %}"></script>

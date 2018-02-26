@@ -16,21 +16,22 @@
 
 from django.shortcuts import render
 from .models import Book, MetaData
+from .forms import UserForm
 from django.shortcuts import redirect
 from .mycore.week.weekBestCrawler import WeekCrawler
 from django.utils import timezone
 
-def book_list(request):
-    start_date = timezone.localtime().date() + timezone.timedelta(hours=3)
-    end_date = timezone.localtime().date() + timezone.timedelta(days=1)
-    books = MetaData.objects.filter(crawl_date__range=(start_date, end_date))
+# def book_list(request):
+#     start_date = timezone.localtime().date() - timezone.timedelta(days=1)
+#     end_date = timezone.localtime().date() + timezone.timedelta(days=1)
+#     books = MetaData.objects.filter(crawl_date__range=(start_date, end_date))
 
-    #print(request.POST['apple1'])
+#     #print(request.POST['apple1'])
 
-    if(books is not None):
-        return render(request, 'book/book_list.html', {'books': books})
-    else:
-        return render(request, 'book/error_no_page.html')
+#     if(books is not None):
+#         return render(request, 'book/book_list.html', {'books': books})
+#     else:
+#         return render(request, 'book/error_no_page.html')
 
 def get_book(request):
     bookQuantity = int(request.POST.get('bookQuantity'))
@@ -51,8 +52,8 @@ def week_chart(request):
     pass
 
 def index(request):
-    start_date = timezone.localtime().date() + timezone.timedelta(hours=3)
-    end_date = timezone.localtime().date() + timezone.timedelta(days=1)
+    start_date = timezone.localtime().date()
+    end_date = timezone.localtime().date() + timezone.timedelta(days=1) - timezone.timedelta(seconds=1)
     books = MetaData.objects.filter(crawl_date__range=(start_date, end_date))
 
     # print(request.POST['apple1'])
@@ -61,3 +62,17 @@ def index(request):
         return render(request, 'book/index.html', {'books': books})
     else:
         return render(request, 'book/error_no_page.html')
+
+def login(request):
+    return render(request, 'book/login.html')
+
+def signup(request):
+    if request.method == "POST":
+        form = UserForm(request.POST)
+        if form.is_valid():
+            new_user = User.objects.create_user(**form.cleaned_data)
+            login(request, new_user)
+            return redirect('index')
+    else:
+        form = UserForm()
+        return render(request, 'book/login.html', {'form': form})

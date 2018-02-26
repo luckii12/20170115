@@ -1,7 +1,7 @@
 from django import forms
-from .models import Book, MetaData
+from django.contrib.auth.models import User
 
-class WeekBookForm(forms.ModelForm):
+class UserForm(forms.ModelForm):
     class Meta:
-        model = Book
-        fields = ('title')
+        model = User
+        fields = ['username', 'email', 'password']
