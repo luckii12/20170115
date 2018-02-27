@@ -14,24 +14,14 @@
 # class PublisherV():
 #     pass
 
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import Book, MetaData
-from .forms import UserForm
-from django.shortcuts import redirect
+from .forms import UserForm, LoginForm
+from django.http import HttpResponse
 from .mycore.week.weekBestCrawler import WeekCrawler
 from django.utils import timezone
-
-# def book_list(request):
-#     start_date = timezone.localtime().date() - timezone.timedelta(days=1)
-#     end_date = timezone.localtime().date() + timezone.timedelta(days=1)
-#     books = MetaData.objects.filter(crawl_date__range=(start_date, end_date))
-
-#     #print(request.POST['apple1'])
-
-#     if(books is not None):
-#         return render(request, 'book/book_list.html', {'books': books})
-#     else:
-#         return render(request, 'book/error_no_page.html')
+from django.contrib.auth.models import User             #장고 User 모델을 사용하는 듯
+from django.contrib.auth import login, authenticate     #장고 로그인
 
 def get_book(request):
     bookQuantity = int(request.POST.get('bookQuantity'))
@@ -48,9 +38,6 @@ def get_book(request):
         startCrawler.endCrawl(driver)
         return redirect('index')
 
-def week_chart(request):
-    pass
-
 def index(request):
     start_date = timezone.localtime().date()
     end_date = timezone.localtime().date() + timezone.timedelta(days=1) - timezone.timedelta(seconds=1)
@@ -63,16 +50,35 @@ def index(request):
     else:
         return render(request, 'book/error_no_page.html')
 
-def login(request):
-    return render(request, 'book/login.html')
+# def login(request):
+#     return render(request, 'book/login.html')
 
+def signin(request):
+    if request.method == "POST":
+        form = LoginForm(request.POST)
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(username = username, password = password)
+        if user is not None:
+            login(request, user)
+            return redirect('index')
+        else:
+            return HttpResponse('로그인 실패. 다시 시도 해보세요.')
+    else:
+        form = LoginForm()
+        return render(request, 'book/login.html', {'form': form})
+    
+#회원 가입 처리가 오면 여기에서 처리합니다.
 def signup(request):
     if request.method == "POST":
         form = UserForm(request.POST)
+        print('#TEST1#: ' + str(form))
         if form.is_valid():
             new_user = User.objects.create_user(**form.cleaned_data)
             login(request, new_user)
+            #회원 가입 처리가 정상적으로 되면 login으로 처리합니다.
             return redirect('index')
+
     else:
         form = UserForm()
-        return render(request, 'book/login.html', {'form': form})
+        return render(request, 'book/signup.html', {'form': form})

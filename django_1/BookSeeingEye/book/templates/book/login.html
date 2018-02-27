@@ -31,76 +31,12 @@
       <div class="login_wrapper">
         <div class="animate form login_form">
           <section class="login_content">
-            <form method="post">
-                <h1>로그인 하세요!</h1>
-                <div>
-                    <input type="text" class="form-control" placeholder="username" required="" />
-                </div>
-                <div>
-                    <input type="password" class="form-control" placeholder="password" required="" />
-                </div>
-                <div>
-                    <a class="btn btn-default submit" href="/login_valid/">로그인!</a>
-                </div>
-              
-                {% comment %} <div class="clearfix">
-                        <a href="{% url "social:begin" "google-oauth2" %}"><button class="btn btn-danger" style="width: 40%">G+ Login</button></a>
-                        <a href="{% url "social:begin" "facebook" %}"><button class="btn btn-primary" style="width: 40%">FB Login</button></a>
-                </div> {% endcomment %}
-                
-                <div class="clearfix"></div>
-
-                <div class="separator">
-                    <p class="change_link">New to site?
-                    <a href="#signup" class="to_register"> Create Account </a>
-                    </p>
-
-                    <div class="clearfix"></div>
-                    <br />
-
-                    <div>
-                    <h1><i class="fa fa-paw"></i> Gentelella Alela!</h1>
-                    <p>©2016 All Rights Reserved. Gentelella Alela! is a Bootstrap 3 template. Privacy and Terms</p>
-                    </div>
-                </div>
-            </form>
-          </section>
-        </div>
-
-        <div id="register" class="animate form registration_form">
-          <section class="login_content">
-            <form method="post" action"">
-                {% csrf_token %}
-                <h1>계정을 만들어 보세요!</h1>
-                <div>
-                    <input type="text" class="form-control" placeholder="username" required="" />
-                </div>
-                <div>
-                    <input type="email" class="form-control" placeholder="email" required="" />
-                </div>
-                <div>
-                    <input type="password" class="form-control" placeholder="password" required="" />
-                </div>
-                <div>
-                    <a class="btn btn-default submit" href="/join/">회원가입</a>
-                </div>
-
-                <div class="clearfix"></div>
-
-                <div class="separator">
-                    <p class="change_link">Already a member ?
-                    <a href="#signin" class="to_register"> Login </a>
-                    </p>
-
-                    <div class="clearfix"></div>
-                    <br />
-
-                    <div>
-                    <h1><i class="fa fa-paw"></i> Gentelella Alela!</h1>
-                    <p>©2016 All Rights Reserved. Gentelella Alela! is a Bootstrap 3 template. Privacy and Terms</p>
-                    </div>
-                </div>
-            </form>
+                <h2>로그인</h2>
+                <form method="post" action="">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <input type="submit" value="로그인" />
+                </form>                
           </section>
         </div>
       </div>
