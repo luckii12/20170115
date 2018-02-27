@@ -9,6 +9,7 @@ urlpatterns = [
     url(r'^$', views.index, name='index'),
     url(r'^login/$', views.signin, name='login'),
     url(r'^logout/$', auth_views.logout, {'next_page' : '/login/'}),
+    #url(r'^accounts/profile/$', views.signin, name='authlogin'),
     # url(r'^signup/$', views.signup, name='signup'),
     url(r'^join/$', views.signup, name='join'),
 ]
