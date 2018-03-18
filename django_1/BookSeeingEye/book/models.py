@@ -1,5 +1,6 @@
 from django.db import models
 from django.db.models import ForeignKey
+# from django_mysql.models import ListCharField
 from django.utils import timezone
 from datetime import datetime
 
@@ -14,10 +15,12 @@ class Book(models.Model):
     pubDate = models.CharField(default="Pubdate_None", max_length=256)
 
     # 책 카테고리 분류
-    cate_A = models.CharField(null=True, blank=True, max_length=256)
-    cate_B = models.CharField(null=True, blank=True, max_length=256)
-    cate_C = models.CharField(null=True, blank=True, max_length=256)
-    cate_D = models.CharField(null=True, blank=True, max_length=256)
+    category = models.CharField(default="None", max_length=1024)
+    # category = models.ListCharField(
+    #     base_field = CharField(max_length=128),
+    #     size = 5,
+    #     max_length = (5 * 128)
+    # )
 
     def __str__(self):
         return self.title
@@ -25,6 +28,7 @@ class Book(models.Model):
 class MetaData(models.Model):
     # 메타데이터 기본 정보
     rank = models.IntegerField(default=-1)
+    rankRiseAndFall = models.CharField(default='?', max_length=128)
     reviewCount = models.IntegerField(default=-1)
     sellingPoint = models.IntegerField(default=-1)
 
@@ -32,7 +36,7 @@ class MetaData(models.Model):
     crawl_date = models.DateTimeField()
 
     # 책
-    book = models.ForeignKey('Book', on_delete=True)
+    book = models.ForeignKey('Book', on_delete=models.CASCADE)
 
     def __str__(self):
         return str(self.book)

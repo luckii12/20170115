@@ -18,7 +18,7 @@ from django.shortcuts import render, redirect
 from .models import Book, MetaData
 from .forms import UserForm, LoginForm
 from django.http import HttpResponse
-from .mycore.week.weekBestCrawler import WeekCrawler
+from .mycore.week import weekBestCrawler
 from django.utils import timezone
 from django.contrib.auth.models import User             #장고 User 모델을 사용하는 듯
 from django.contrib.auth import login, authenticate     #장고 로그인
@@ -32,23 +32,25 @@ def get_book(request):
         #if(request.method == 'POST'):
         print('리퀘스트: ' + str(request.POST))
         #if(request.POST['bookQuantity'] > 0):
-        startCrawler = WeekCrawler()
-        driver = startCrawler.getDriver()
-        startCrawler.startCrawl(bookQuantity, driver)
-        startCrawler.endCrawl(driver)
+        
+        driver = weekBestCrawler.getDriver()
+        weekBestCrawler.startCrawl(bookQuantity, driver)
+        weekBestCrawler.endCrawl(driver)
         return redirect('index')
 
 def index(request):
-    start_date = timezone.localtime().date()
-    end_date = timezone.localtime().date() + timezone.timedelta(days=1) - timezone.timedelta(seconds=1)
-    books = MetaData.objects.filter(crawl_date__range=(start_date, end_date))
-
-    # print(request.POST['apple1'])
-
-    if (books is not None):
-        return render(request, 'book/index.html', {'books': books})
+    # 어제 오늘의 리스트를 구해옵니다.
+    today_lists = weekBestCrawler.getBookList(weekBestCrawler.getTodayStart(), weekBestCrawler.getTodayEdge())
+    yesterday_lists = weekBestCrawler.getBookList(weekBestCrawler.getYesterdayStart(), weekBestCrawler.getYesterdayEdge())
+    
+    if (yesterday_lists.count()) == 0:
+        print('show noyes')
+        return render(request, 'book/index.html', {'books': today_lists})
     else:
-        return render(request, 'book/error_no_page.html')
+        print('show yesyes')
+        weekBestCrawler.setRankRiseAndFall(today_lists, yesterday_lists)
+        return render(request, 'book/index.html', {'books': today_lists})
+    return render(request, 'book/error_no_page.html')
 
 # def login(request):
 #     return render(request, 'book/login.html')

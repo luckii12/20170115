@@ -4,6 +4,7 @@
         <thead>
         <tr>
             <th>순위</th>
+            <th>등락</th>
             <th>제목</th>
             <th>ISBN</th>
             <th>저자</th>
@@ -12,12 +13,14 @@
             <th>독자 반응</th>
             <th>판매지수</th>
             <th>책 출간일</th>
+            <th>카테고리</th>
         </tr>
         </thead>
         <tbody>
         {% for item in books %}
         <tr>
             <th scope="row">{{ item.rank }}</th>
+            <td>{{ item.rankRiseAndFall }}</td>
             <td>{{ item.book.title }}</td>
             <td>{{ item.book.isbn }}</td>
             <td>{{ item.book.author }}</td>
@@ -26,6 +29,7 @@
             <td>{{ item.reviewCount }}</td>
             <td>{{ item.sellingPoint }}</td>
             <td>{{ item.book.pubDate }}</td>
+            <td>{{ item.book.category}}</td>
         </tr>
         {% endfor %}
         </tbody>

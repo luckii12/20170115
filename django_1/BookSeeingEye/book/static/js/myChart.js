@@ -6,7 +6,7 @@ $(document).ready(function () {
 	var table = $('#data_table').DataTable({
 		dom: 'Blfrtip',
         buttons: [
-            'copy', 'csv', 'print'
+            // 'copy', 'csv', 'print'
         ]
 	});
 	var item = $('#data_table > tbody > tr');
@@ -50,11 +50,45 @@ $(document).ready(function () {
 		myChart.update();
 		myDonut.update();
 	});
+
+	//Table에 마우스 클릭을 하면 카테고리 정보를 보여줍니다. 
+    $('#data_table tbody').on('click', 'td.details-control', function () {
+        var tr = $(this).closest('tr');
+        var row = table.row( tr );
+ 
+        if ( row.child.isShown() ) {
+            // This row is already open - close it
+            row.child.hide();
+            tr.removeClass('shown');
+        }
+        else {
+            // Open this row
+            row.child( format(row.data()) ).show();
+            tr.addClass('shown');
+        }
+    } );
 });
+
+function format ( d ) {
+    // `d` is the original data object for the row
+    return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
+        '<tr>'+
+            '<td>Full name:</td>'+
+            '<td>'+d.name+'</td>'+
+        '</tr>'+
+        '<tr>'+
+            '<td>Extension number:</td>'+
+            '<td>'+d.extn+'</td>'+
+        '</tr>'+
+        '<tr>'+
+            '<td>Extra info:</td>'+
+            '<td>And any further details here (images etc)...</td>'+
+        '</tr>'+
+    '</table>';
+}
 
 /*
 	chart.js Rendering
-
 	item[0].cells[0] == <th scope="row" class="sorting_1">1</th>
 	item[0].cells[1] == <td>직장인을 위한 실무 엑셀</td>
 	item[0].cells[2] == <td>9791160500790</td>
@@ -81,8 +115,8 @@ function setBarDatas(item){
 
 	for (var i = 0; i < item.length; i++) {
 		//strRank.push(item[i].cells[0].innerText);
-		strTitle.push(item[i].cells[1].innerText);
-		strSellingPoint.push(item[i].cells[7].innerText);
+		strTitle.push(item[i].cells[2].innerText);
+		strSellingPoint.push(item[i].cells[8].innerText);
 	}
 
 	var result = [strSellingPoint, strTitle];
@@ -92,7 +126,7 @@ function setBarDatas(item){
 function setDonutDatas(item){
 	pubValues = {};
 	for (var i = 0; i < item.length; i++) {
-		nowPubName = item[i].cells[4].innerText;
+		nowPubName = item[i].cells[5].innerText;
 		if(pubValues[nowPubName] == undefined){
 			pubValues[nowPubName] = 1;
 		}else{
