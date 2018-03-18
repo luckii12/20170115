@@ -6,7 +6,7 @@ $(document).ready(function () {
 	var table = $('#data_table').DataTable({
 		dom: 'Blfrtip',
         buttons: [
-            // 'copy', 'csv', 'print'
+        	'copy', 'csv', 'print'
         ]
 	});
 	var item = $('#data_table > tbody > tr');
