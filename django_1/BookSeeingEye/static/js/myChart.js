@@ -6,7 +6,7 @@ $(document).ready(function () {
 	var table = $('#data_table').DataTable({
 		dom: 'Blfrtip',
         buttons: [
-            'copy', 'csv', 'print'
+            // 'copy', 'csv', 'print'
         ]
 	});
 	var item = $('#data_table > tbody > tr');
@@ -49,6 +49,9 @@ $(document).ready(function () {
 		myDonut.data.datasets[0].borderColor = resultBarColors;
 		myChart.update();
 		myDonut.update();
+
+		// 새 책 하이라이트
+		checkNewBook(item);
 	});
 
 	//Table에 마우스 클릭을 하면 카테고리 정보를 보여줍니다. 
@@ -68,6 +71,17 @@ $(document).ready(function () {
         }
     } );
 });
+
+function checkNewBook(item){
+	for (var i = 0; i < item.length; i++) {
+		if(item[i].cells[1].innerText.match('new!')){
+			// item[i].style.backgroundColor = '#FA5882';
+			// item[i].style.opacity = '0.9';
+			item[i].style.color = '#FA5882';
+			item[i].style.fontWeight = '500';
+		}
+	}
+}
 
 function format ( d ) {
     // `d` is the original data object for the row

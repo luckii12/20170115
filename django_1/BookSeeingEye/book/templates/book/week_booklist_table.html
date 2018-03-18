@@ -29,7 +29,11 @@
             <td>{{ item.reviewCount }}</td>
             <td>{{ item.sellingPoint }}</td>
             <td>{{ item.book.pubDate }}</td>
-            <td>{{ item.book.category}}</td>
+            <td></td>
+            {% comment %} <script>
+                var temp = "{{ item.book.category }}";
+                $('#category').text(temp);
+            </script> {% endcomment %}
         </tr>
         {% endfor %}
         </tbody>
