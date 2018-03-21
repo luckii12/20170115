@@ -22,8 +22,9 @@ from .mycore.week import weekBestCrawler
 from django.utils import timezone
 from django.contrib.auth.models import User             #장고 User 모델을 사용하는 듯
 from django.contrib.auth import login, authenticate     #장고 로그인
+from django.http import JsonResponse
 
-def get_book(request):
+def get_books(request):
     bookQuantity = int(request.POST.get('bookQuantity'))
     print(bookQuantity)
     #
@@ -37,6 +38,11 @@ def get_book(request):
         weekBestCrawler.startCrawl(bookQuantity, driver)
         weekBestCrawler.endCrawl(driver)
         return redirect('index')
+
+def get_book(request):
+    # print('책 클릭 리퀘스트: ' + str(request.POST))
+    data = weekBestCrawler.getBookMetaDataList(str(request.POST['isbn']))
+    return JsonResponse({'metadata': data})
 
 def index(request):
     # 어제 오늘의 리스트를 구해옵니다.

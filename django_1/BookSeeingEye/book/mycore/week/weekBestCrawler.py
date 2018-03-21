@@ -163,6 +163,21 @@ def getYesterdayStart():
 def getBookList(start, end):
     return MetaData.objects.filter(crawl_date__range=(start, end))
 
+def getBookMetaDataList(user_isbn):
+    temp = []
+    try:
+        book = Book.objects.get(isbn = str(user_isbn))
+        for item in MetaData.objects.filter(book = book):
+            temp_dic = {}
+            temp_dic['date'] = item.crawl_date.date()
+            temp_dic['rank'] = item.rank
+            temp.append(temp_dic)
+    except:
+        # 누른 책이 없는 책일 수는 없기는 함
+        pass
+    
+    return temp
+
 '''
     어제 오늘의 rank를 비교하여 Model의 rankRiseAndFall 값에 저장한다.
 
