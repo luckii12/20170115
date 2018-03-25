@@ -66,7 +66,7 @@
             </div>
           </div>
           <div class="col-md-12 col-sm-12 col-xs-12">
-            <div id="myChart">{% csrf_token %}
+            <div id="myChart">
                 {% include "./week_booklist_table.html" %}
             </div>
           </div>
@@ -119,12 +119,12 @@
           <div class="x_content">
             <table class="" style="width:100%">
               <tr>
-                <th style="width:37%;">
+                <th style="width:36%;">
                   <p>Top 5</p>
                 </th>
               </tr>
               <tr>
-                <td>
+                <td style="margin: 1px;">
                   {% include "./week_booklist_donut.html" %}
                 </td>
               </tr>
@@ -161,7 +161,9 @@
                 </th>
               </tr>
               <tr>
-                <td>
+                <!-- 여기에 책 Rank 변화 그래프 넣을 것 -->
+                <td id="bookRankGraph">
+                  {% include "./week_bookinfo_graph.html" %}
                 </td>
               </tr>
             </table>

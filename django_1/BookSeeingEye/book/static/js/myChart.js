@@ -53,23 +53,6 @@ $(document).ready(function () {
 		// 새 책 하이라이트
 		checkNewBook(item);
 	});
-
-	//Table에 마우스 클릭을 하면 카테고리 정보를 보여줍니다. 
-    $('#data_table tbody').on('click', 'td.details-control', function () {
-        var tr = $(this).closest('tr');
-        var row = table.row( tr );
- 
-        if ( row.child.isShown() ) {
-            // This row is already open - close it
-            row.child.hide();
-            tr.removeClass('shown');
-        }
-        else {
-            // Open this row
-            row.child( format(row.data()) ).show();
-            tr.addClass('shown');
-        }
-    } );
 });
 
 function checkNewBook(item){
@@ -225,6 +208,8 @@ function drawDonutChart(strPublisherName, resultDonutDatas, resultDonutColors) {
 					}
 				}
 			},
+			responsive: true,
+			maintainAspectRatio: false,
 		},
 	});
 
