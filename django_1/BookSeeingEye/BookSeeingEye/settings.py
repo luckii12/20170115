@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/2.0/ref/settings/
 import os
 import json
 from django.core.exceptions import ImproperlyConfigured
+
 # 프로젝트의 루트 위치를 넣어준다. 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -69,7 +70,7 @@ SECRET_KEY = '39lpnpz4hiutaf$eb*7q@oqv$rz6m=f2g(^=fmumhz@2dxuux7'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-ALLOWED_HOSTS = ['*', 'localhost', '220.76.132.232', '192.168.0.46']
+ALLOWED_HOSTS = ['*']
 
 # Application definition
 
@@ -178,8 +179,6 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-ALLOWED_HOSTS = []
-
 BOWER_COMPONENTS_ROOT = BASE_DIR + '/components/'
 BOWER_INSTALLED_APPS = (
     'gentelella',
