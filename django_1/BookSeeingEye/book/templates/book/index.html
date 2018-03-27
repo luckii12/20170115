@@ -55,12 +55,12 @@
                 </div>
                 <div class="row">
                     <div class="col-md-6">
-                        <form class="form-inline" method="post" action="/getBooks/" style="margin-top:10px">{% csrf_token %}
+                        {% comment %} <form class="form-inline" method="post" action="/getBooks/" style="margin-top:10px">{% csrf_token %}
                             <div class="form-group">
                                 <input type="text" class="form-control" name="bookQuantity" placeholder="페이지 입력">
                             </div>
                             <button type="submit" class="btn btn-default" style="margin-bottom:0px">시작!</button>
-                        </form>
+                        </form> {% endcomment %}
                     </div>
                 </div>
             </div>

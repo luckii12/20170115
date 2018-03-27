@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 {% load static %}
-{% if user.is_authenticated %}
+{% comment %} {% if user.is_authenticated %} {% endcomment %}
 <html lang="en">
   <head>
     {% block head %}
@@ -136,4 +136,4 @@
     {% endblock body %}
   </body>
 </html>
-{% endif %}
+{% comment %} {% endif %} {% endcomment %}

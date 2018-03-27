@@ -2,7 +2,7 @@
 	dataTable Rendering
 */
 
-$(document).ready(function () {
+$(document).ready(function(){
 	var table = $('#data_table').DataTable({
 		dom: 'Blfrtip',
         buttons: [
