@@ -38,7 +38,6 @@ $(document).ready(function (){
             success:function(data){
                 $('body > div > div > div.right_col > div:nth-child(4) > div:nth-child(2) > div > div.x_content > table > tbody > tr:nth-child(2) > td').text('');
                 // console.log(data['metadata'].length);
-                var temp_bookInfo = [];
                 var temp_bookRank = [];
                 var temp_bookDate = [];
                 for(var i = 0; i < data['metadata'].length; i++){
@@ -48,63 +47,64 @@ $(document).ready(function (){
                     temp_bookRank.push(data['metadata'][i]['rank']);
                     temp_bookDate.push(data['metadata'][i]['date']);
                 }
-
-                temp_bookInfo.push(temp_bookRank);
-                temp_bookInfo.push(temp_bookDate);
+                
+                var temp_bookInfo = [temp_bookRank, temp_bookDate];
+                console.log(temp_bookInfo);
                 
                 if(myBookInfoGraph == undefined){
-                    myBookInfoGraph = drawBookInfoGraph(temp_bookInfo, setGraphColors(data['metadata']));
+                    myBookInfoGraph = drawBookInfoGraph(temp_bookInfo, temp_bookRank);
                 }else{
-                    
+                    myBookInfoGraph.data.datasets[0].data = temp_bookRank;
+                    myBookInfoGraph.data.labels = temp_bookDate;
+                    myBookInfoGraph.update();
                 }
             }
         });
     
         // 책 제목 여기에서 찍어주기
-        $('body > div > div > div.right_col > div:nth-child(4) > div:nth-child(2) > div > div.x_content > table > tbody > tr:nth-child(1) > th > p').text($(this).find('td')[1].innerHTML);
-    
-        // Book Info Chart 여기에서 그려주기
-        /* 
-            1. 처음에 아무 것도 그려져 있지 않다면 인스턴스를 만들어 그림
-            2. 뭔가 그려져 있다면(인스턴스가 있다면) 리로드만 하면 된다.
-        */
-        
+        $('#bookName').text(tableData[2].replace('amp;', ''));    
     });
 });
 
 function drawBookInfoGraph(resultGraphDatas, resultGraphColors){
-	var ctx = document.getElementById("week_bookinfo_graph");
+    var ctx = $("#week_bookinfo_graph");
 	var myGraph = new Chart(ctx, {
 		//차트 타입
-		type: 'bar',
+		type: 'line',
 		//차트 데이터
 		data: {
 			//차트 라벨
 			labels: resultGraphDatas[1],
 			//차트의 데이터 셋
 			datasets: [{
-				//차트 라벨과 함께 보여질 라벨 '#'에 labels가 하나씩 들어감
-				label: '날짜',
+				// 차트 라벨과 함께 보여질 라벨 '#'에 labels가 하나씩 들어감
+				label: '순위',
 				//각 값은 labels에 대입된다.
-				data: resultGraphDatas[0],
-				backgroundColor: resultGraphColors,
-				borderColor: resultGraphColors,
-				borderWidth: 1,
+				data: resultGraphDatas[0].reverse(),
+				borderColor: "#3cba9f",
+				fill: false
 			}]
-		},
-		options: {
-            scales: {
+        },
+        options: {
+			scales: {
 				xAxes: [{
 					ticks: {
 						autoSkip: false,
 						maxRotation: 90,
 						minRotation: 90,
-						fontSize: 14,
+                        fontSize: 14,
 					}
-				}]
-			}
+                }],
+                yAxes: [{
+                    ticks: {
+                        reverse: true,
+                    }
+                }]
+            },
 		},
 	});
+
+	return myGraph;
 }
 
 function setGraphColors(item){
@@ -118,4 +118,19 @@ function setGraphColors(item){
 	}
 
 	return strBgColor;
+}
+
+function setGraphDatas(item){
+	//var strRank = [];
+	var strSellingPoint = [];
+	var strTitle = [];
+
+	for (var i = 0; i < item.length; i++) {
+		//strRank.push(item[i].cells[0].innerText);
+		strTitle.push(item[i].cells[2].innerText);
+		strSellingPoint.push(item[i].cells[8].innerText);
+	}
+
+	var result = [strSellingPoint, strTitle];
+	return result;
 }

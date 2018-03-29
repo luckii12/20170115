@@ -55,12 +55,12 @@
                 </div>
                 <div class="row">
                     <div class="col-md-6">
-                        {% comment %} <form class="form-inline" method="post" action="/getBooks/" style="margin-top:10px">{% csrf_token %}
+                        <form class="form-inline" method="post" action="/getBooks/" style="margin-top:10px">{% csrf_token %}
                             <div class="form-group">
                                 <input type="text" class="form-control" name="bookQuantity" placeholder="페이지 입력">
                             </div>
                             <button type="submit" class="btn btn-default" style="margin-bottom:0px">시작!</button>
-                        </form> {% endcomment %}
+                        </form>
                     </div>
                 </div>
             </div>
@@ -156,14 +156,12 @@
           <div class="x_content">
             <table class="" style="width:100%">
               <tr>
-                <th style="width:37%;">
-                  <p>Book Name</p>
-                </th>
+                <p id="bookName">Book Name</p>        
               </tr>
               <tr>
+                {% include "./week_bookinfo_graph.html" %}
                 <!-- 여기에 책 Rank 변화 그래프 넣을 것 -->
-                <td id="bookRankGraph">
-                  {% include "./week_bookinfo_graph.html" %}
+                <td>{% csrf_token %}
                 </td>
               </tr>
             </table>
@@ -179,8 +177,7 @@
 	<!-- Chart.js -->
 	<script src="{% static 'gentelella/vendors/Chart.js/dist/Chart.min.js' %}"></script>
   <script src="{% static 'gentelella/vendors/Chart.js/dist/Chart.bundle.min.js' %}"></script>
-  {% comment %} <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.bundle.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js"></script> {% endcomment %}
+
 	<!-- gauge.js -->
 	<script src="{% static 'gentelella/vendors/gauge.js/dist/gauge.min.js' %}"></script>
 	<!-- Skycons -->
@@ -205,4 +202,5 @@
 	<!-- myChart -->
   <script src="{% static 'js/myChart.js' %}"></script>
   <script src="{% static 'js/myBook.js' %}"></script>
+  <script src="{% static 'js/myCategory.js' %}"></script>
 {% endblock javascripts %}
