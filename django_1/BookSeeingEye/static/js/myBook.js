@@ -1,5 +1,5 @@
 $(document).ready(function (){
-    var myBookInfoGraph;
+    var myBookInfoGraph, myBookSPGraph;
     var table = $('#data_table').DataTable();
 
     $.ajaxSetup({ 
@@ -40,49 +40,42 @@ $(document).ready(function (){
                 // console.log(data['metadata'].length);
                 var temp_bookRank = [];
                 var temp_bookDate = [];
+                var temp_bookSP = [];
                 for(var i = 0; i < data['metadata'].length; i++){
                     // console.log(data['metadata'][i]);
                     var appendData = '<li>' + data['metadata'][i]['date'] + ' - ' + data['metadata'][i]['rank'] + '</li>';
                     $('#bookRankGraph').append(appendData);
                     temp_bookRank.push(data['metadata'][i]['rank']);
                     temp_bookDate.push(data['metadata'][i]['date']);
+                    temp_bookSP.push(data['metadata'][i]['sp']);
                 }
                 
-                var temp_bookInfo = [temp_bookRank, temp_bookDate];
+                var temp_bookInfo = [temp_bookRank, temp_bookDate, temp_bookSP];
                 console.log(temp_bookInfo);
                 
                 if(myBookInfoGraph == undefined){
                     myBookInfoGraph = drawBookInfoGraph(temp_bookInfo, temp_bookRank);
+                    myBookSPGraph = drawSPInfoGraph(temp_bookInfo, temp_bookSP);
                 }else{
-                    
+                    myBookInfoGraph.data.datasets[0].data = temp_bookRank;
+                    myBookInfoGraph.data.labels = temp_bookDate;
+
+                    myBookSPGraph.data.datasets[0].data = temp_bookSP;
+                    myBookInfoGraph.data.labels = temp_bookDate;
+
+                    myBookInfoGraph.update();
+                    myBookSPGraph.update();
                 }
             }
         });
     
         // 책 제목 여기에서 찍어주기
-        $('body > div > div > div.right_col > div:nth-child(4) > div:nth-child(2) > div > div.x_content > table > tbody > tr:nth-child(1) > th > p').text($(this).find('td')[1].innerHTML);
-    
-        // Book Info Chart 여기에서 그려주기
-        /* 
-            1. 처음에 아무 것도 그려져 있지 않다면 인스턴스를 만들어 그림
-            2. 뭔가 그려져 있다면(인스턴스가 있다면) 리로드만 하면 된다.
-        */
-        
+        $('#bookName').text(tableData[2].replace('amp;', ''));    
     });
 });
 
 function drawBookInfoGraph(resultGraphDatas, resultGraphColors){
     var ctx = $("#week_bookinfo_graph");
-    console.log('resultGraphDatas[0] Length: ' + resultGraphDatas[0].length);
-    Array.from(resultGraphDatas[0]);
-    console.log('resultGraphDatas[0]: ' + resultGraphDatas[0] + 'type: ' + typeof(resultGraphDatas[0]));
-
-    console.log('resultGraphDatas[1] Length: ' + resultGraphDatas[1].length);
-    Array.from(resultGraphDatas[1]);
-    console.log('resultGraphDatas[1]: ' + resultGraphDatas[1] + 'type: ' + typeof(resultGraphDatas[1]));
-    
-    console.log('resultGraphColors Length: ' + resultGraphColors.length);
-
 	var myGraph = new Chart(ctx, {
 		//차트 타입
 		type: 'line',
@@ -93,13 +86,30 @@ function drawBookInfoGraph(resultGraphDatas, resultGraphColors){
 			//차트의 데이터 셋
 			datasets: [{
 				// 차트 라벨과 함께 보여질 라벨 '#'에 labels가 하나씩 들어감
-				// label: '날짜',
+				label: '순위',
 				//각 값은 labels에 대입된다.
-				data: resultGraphDatas[0],
-				borderColor: resultGraphColors,
-				borderWidth: 1,
+				data: resultGraphDatas[0].reverse(),
+				borderColor: "#3cba9f",
+				fill: false
 			}]
         },
+        options: {
+			scales: {
+				xAxes: [{
+					ticks: {
+						autoSkip: false,
+						maxRotation: 90,
+						minRotation: 90,
+                        fontSize: 14,
+					}
+                }],
+                yAxes: [{
+                    ticks: {
+                        reverse: true,
+                    }
+                }]
+            },
+		},
 	});
 
 	return myGraph;
@@ -116,4 +126,19 @@ function setGraphColors(item){
 	}
 
 	return strBgColor;
+}
+
+function setGraphDatas(item){
+	//var strRank = [];
+	var strSellingPoint = [];
+	var strTitle = [];
+
+	for (var i = 0; i < item.length; i++) {
+		//strRank.push(item[i].cells[0].innerText);
+		strTitle.push(item[i].cells[2].innerText);
+		strSellingPoint.push(item[i].cells[8].innerText);
+	}
+
+	var result = [strSellingPoint, strTitle];
+	return result;
 }
