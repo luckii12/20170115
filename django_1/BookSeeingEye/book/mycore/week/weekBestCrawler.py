@@ -171,6 +171,7 @@ def getBookMetaDataList(user_isbn):
             temp_dic = {}
             temp_dic['date'] = item.crawl_date.date()
             temp_dic['rank'] = item.rank
+            temp_dic['sp'] = item.sellingPoint
             temp.append(temp_dic)
     except:
         # 누른 책이 없는 책일 수는 없기는 함

@@ -1,5 +1,5 @@
 $(document).ready(function (){
-    var myBookInfoGraph;
+    var myBookInfoGraph, myBookSPGraph;
     var table = $('#data_table').DataTable();
 
     $.ajaxSetup({ 
@@ -40,23 +40,31 @@ $(document).ready(function (){
                 // console.log(data['metadata'].length);
                 var temp_bookRank = [];
                 var temp_bookDate = [];
+                var temp_bookSP = [];
                 for(var i = 0; i < data['metadata'].length; i++){
                     // console.log(data['metadata'][i]);
                     var appendData = '<li>' + data['metadata'][i]['date'] + ' - ' + data['metadata'][i]['rank'] + '</li>';
                     $('#bookRankGraph').append(appendData);
                     temp_bookRank.push(data['metadata'][i]['rank']);
                     temp_bookDate.push(data['metadata'][i]['date']);
+                    temp_bookSP.push(data['metadata'][i]['sp']);
                 }
                 
-                var temp_bookInfo = [temp_bookRank, temp_bookDate];
+                var temp_bookInfo = [temp_bookRank, temp_bookDate, temp_bookSP];
                 console.log(temp_bookInfo);
                 
                 if(myBookInfoGraph == undefined){
                     myBookInfoGraph = drawBookInfoGraph(temp_bookInfo, temp_bookRank);
+                    myBookSPGraph = drawSPInfoGraph(temp_bookInfo, temp_bookSP);
                 }else{
                     myBookInfoGraph.data.datasets[0].data = temp_bookRank;
                     myBookInfoGraph.data.labels = temp_bookDate;
+
+                    myBookSPGraph.data.datasets[0].data = temp_bookSP;
+                    myBookInfoGraph.data.labels = temp_bookDate;
+
                     myBookInfoGraph.update();
+                    myBookSPGraph.update();
                 }
             }
         });
