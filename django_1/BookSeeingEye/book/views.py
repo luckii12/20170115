@@ -50,10 +50,8 @@ def index(request):
     yesterday_lists = weekBestCrawler.getBookList(weekBestCrawler.getYesterdayStart(), weekBestCrawler.getYesterdayEdge())
     
     if (yesterday_lists.count()) == 0:
-        print('show noyes')
         return render(request, 'book/index.html', {'books': today_lists})
     else:
-        print('show yesyes')
         weekBestCrawler.setRankRiseAndFall(today_lists, yesterday_lists)
         return render(request, 'book/index.html', {'books': today_lists})
     return render(request, 'book/error_no_page.html')

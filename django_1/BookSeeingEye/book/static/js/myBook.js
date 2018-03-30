@@ -71,8 +71,50 @@ $(document).ready(function (){
     
         // 책 제목 여기에서 찍어주기
         $('#bookName').text(tableData[2].replace('amp;', ''));    
+        $('#bookName2').text(tableData[2].replace('amp;', ''));    
     });
 });
+
+function drawSPInfoGraph(resultGraphDatas, resultGraphColors){
+    var ctx = $("#week_bookinfo_graph2");
+	var myGraph = new Chart(ctx, {
+		//차트 타입
+		type: 'line',
+		//차트 데이터
+		data: {
+			//차트 라벨
+			labels: resultGraphDatas[1],
+			//차트의 데이터 셋
+			datasets: [{
+				// 차트 라벨과 함께 보여질 라벨 '#'에 labels가 하나씩 들어감
+				label: '판매지수',
+				//각 값은 labels에 대입된다.
+				data: resultGraphDatas[2],
+				borderColor: "#3cbaff",
+				fill: false
+			}]
+        },
+        options: {
+			scales: {
+				xAxes: [{
+					ticks: {
+						autoSkip: false,
+						maxRotation: 90,
+						minRotation: 90,
+                        fontSize: 14,
+					}
+                }],
+                yAxes: [{
+                    ticks: {
+                        reverse: false,
+                    }
+                }]
+            },
+		},
+	});
+
+	return myGraph;
+}
 
 function drawBookInfoGraph(resultGraphDatas, resultGraphColors){
     var ctx = $("#week_bookinfo_graph");

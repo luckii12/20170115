@@ -2,8 +2,6 @@ $(document).ready();
 
 function tableInitialize(){
     ajaxInit();
-
-
 }
 
 function callWholeTableInfo(){
