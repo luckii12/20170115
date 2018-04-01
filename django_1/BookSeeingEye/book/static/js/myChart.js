@@ -2,30 +2,30 @@
 	dataTable Rendering
 */
 
-$(document).ready(function(){
+$(document).ready(function () {
 	var table = $('#data_table').DataTable({
 		dom: 'Blfrtip',
-        buttons: [
-        	'copy', 'csv', 'print'
+		buttons: [
+			'copy', 'csv', 'print'
 		],
-		responsive:{
-            details:{
-                renderer: function(api, rowIdx, columns){
-                    var data = $.map( columns, function ( col, i ) {
-                        return col.hidden ?
-                            '<tr data-dt-row="'+col.rowIndex+'" data-dt-column="'+col.columnIndex+'">'+
-                                '<td>'+col.title+':'+'</td> '+
-                                '<td>'+col.data+'</td>'+
-                            '</tr>' :
-                            '';
-                    } ).join('');
+		responsive: {
+			details: {
+				renderer: function (api, rowIdx, columns) {
+					var data = $.map(columns, function (col, i) {
+						return col.hidden ?
+							'<tr data-dt-row="' + col.rowIndex + '" data-dt-column="' + col.columnIndex + '">' +
+							'<td>' + col.title + ':' + '</td> ' +
+							'<td>' + col.data + '</td>' +
+							'</tr>' :
+							'';
+					}).join('');
 
-                    return data ?
-                        $('<table/>').append(data):
-                        false;
-                }
-            }
-        }
+					return data ?
+						$('<table/>').append(data) :
+						false;
+				}
+			}
+		}
 	});
 	var item = $('#data_table > tbody > tr');
 
@@ -36,19 +36,19 @@ $(document).ready(function(){
 	var resultDonutDatas = setDonutDatas(item);
 	var strPublisherName = [];
 	var valPublisherName = [];
-	for (var i = 0; i < 5; i++){
+	for (var i = 0; i < 5; i++) {
 		strPublisherName.push(Object.keys(resultDonutDatas)[i]);
 		valPublisherName.push(Object.values(resultDonutDatas)[i]);
 	}
 	var myDonut = drawDonutChart(strPublisherName, valPublisherName, resultBarColors);
 
 	//단순히 Table이 다시 render가 되면 여기도 동작합니다.
-	table.on('draw', function(){
+	table.on('draw', function () {
 		item = $('#data_table > tbody > tr');
 		resultBarDatas = setBarDatas(item);
 		resultBarColors = setBarColors(item);
 		resultDonutDatas = setDonutDatas(item);
-		
+
 		myChart.data.datasets[0].data = resultBarDatas[0];
 		myChart.data.labels = resultBarDatas[1];
 		myChart.data.datasets[0].backgroundColor = resultBarColors;
@@ -56,7 +56,7 @@ $(document).ready(function(){
 
 		strPublisherName = [];
 		valPublisherName = [];
-		for (var i = 0; i < 5; i++){
+		for (var i = 0; i < 5; i++) {
 			strPublisherName.push(Object.keys(resultDonutDatas)[i]);
 			valPublisherName.push(Object.values(resultDonutDatas)[i]);
 		}
@@ -73,9 +73,9 @@ $(document).ready(function(){
 	});
 });
 
-function checkNewBook(item){
+function checkNewBook(item) {
 	for (var i = 0; i < item.length; i++) {
-		if(item[i].cells[1].innerText.match('new!')){
+		if (item[i].cells[1].innerText.match('new!')) {
 			// item[i].style.backgroundColor = '#FA5882';
 			// item[i].style.opacity = '0.9';
 			item[i].style.color = '#FA5882';
@@ -84,22 +84,22 @@ function checkNewBook(item){
 	}
 }
 
-function format ( d ) {
-    // `d` is the original data object for the row
-    return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
-        '<tr>'+
-            '<td>Full name:</td>'+
-            '<td>'+d.name+'</td>'+
-        '</tr>'+
-        '<tr>'+
-            '<td>Extension number:</td>'+
-            '<td>'+d.extn+'</td>'+
-        '</tr>'+
-        '<tr>'+
-            '<td>Extra info:</td>'+
-            '<td>And any further details here (images etc)...</td>'+
-        '</tr>'+
-    '</table>';
+function format(d) {
+	// `d` is the original data object for the row
+	return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' +
+		'<tr>' +
+		'<td>Full name:</td>' +
+		'<td>' + d.name + '</td>' +
+		'</tr>' +
+		'<tr>' +
+		'<td>Extension number:</td>' +
+		'<td>' + d.extn + '</td>' +
+		'</tr>' +
+		'<tr>' +
+		'<td>Extra info:</td>' +
+		'<td>And any further details here (images etc)...</td>' +
+		'</tr>' +
+		'</table>';
 }
 
 /*
@@ -110,7 +110,7 @@ function format ( d ) {
 	and so on...
 */
 
-function setBarColors(item){
+function setBarColors(item) {
 	var strBgColor = [];
 	for (var i = 0; i < item.length; i++) {
 		strR = Math.floor(Math.random() * 255) + 1;
@@ -123,7 +123,7 @@ function setBarColors(item){
 	return strBgColor;
 }
 
-function setBarDatas(item){
+function setBarDatas(item) {
 	//var strRank = [];
 	var strSellingPoint = [];
 	var strTitle = [];
@@ -138,13 +138,13 @@ function setBarDatas(item){
 	return result;
 }
 
-function setDonutDatas(item){
+function setDonutDatas(item) {
 	pubValues = {};
 	for (var i = 0; i < item.length; i++) {
 		nowPubName = item[i].cells[5].innerText;
-		if(pubValues[nowPubName] == undefined){
+		if (pubValues[nowPubName] == undefined) {
 			pubValues[nowPubName] = 1;
-		}else{
+		} else {
 			pubValues[nowPubName] += 1;
 		}
 	}
