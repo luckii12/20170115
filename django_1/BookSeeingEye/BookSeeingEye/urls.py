@@ -23,5 +23,6 @@ LOGIN_REDIRECT_URL='/'
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'', include('book.urls')),
-    # url('', include('social_django.urls', namespace='social')), # 이 줄을 등록해주면 됩니다.
+    url('', include('social_django.urls', namespace='social')), # 이 줄을 등록해주면 됩니다.
+    #url('', include('book.urls', namespace='social')), # 이 줄을 등록해주면 됩니다.
 ]

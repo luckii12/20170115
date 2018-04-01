@@ -2,12 +2,30 @@
 	dataTable Rendering
 */
 
-$(document).ready(function () {
+$(document).ready(function(){
 	var table = $('#data_table').DataTable({
 		dom: 'Blfrtip',
         buttons: [
-            'copy', 'csv', 'print'
-        ]
+        	'copy', 'csv', 'print'
+		],
+		responsive:{
+            details:{
+                renderer: function(api, rowIdx, columns){
+                    var data = $.map( columns, function ( col, i ) {
+                        return col.hidden ?
+                            '<tr data-dt-row="'+col.rowIndex+'" data-dt-column="'+col.columnIndex+'">'+
+                                '<td>'+col.title+':'+'</td> '+
+                                '<td>'+col.data+'</td>'+
+                            '</tr>' :
+                            '';
+                    } ).join('');
+
+                    return data ?
+                        $('<table/>').append(data):
+                        false;
+                }
+            }
+        }
 	});
 	var item = $('#data_table > tbody > tr');
 
@@ -49,12 +67,43 @@ $(document).ready(function () {
 		myDonut.data.datasets[0].borderColor = resultBarColors;
 		myChart.update();
 		myDonut.update();
+
+		// 새 책 하이라이트
+		checkNewBook(item);
 	});
 });
 
+function checkNewBook(item){
+	for (var i = 0; i < item.length; i++) {
+		if(item[i].cells[1].innerText.match('new!')){
+			// item[i].style.backgroundColor = '#FA5882';
+			// item[i].style.opacity = '0.9';
+			item[i].style.color = '#FA5882';
+			item[i].style.fontWeight = '500';
+		}
+	}
+}
+
+function format ( d ) {
+    // `d` is the original data object for the row
+    return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
+        '<tr>'+
+            '<td>Full name:</td>'+
+            '<td>'+d.name+'</td>'+
+        '</tr>'+
+        '<tr>'+
+            '<td>Extension number:</td>'+
+            '<td>'+d.extn+'</td>'+
+        '</tr>'+
+        '<tr>'+
+            '<td>Extra info:</td>'+
+            '<td>And any further details here (images etc)...</td>'+
+        '</tr>'+
+    '</table>';
+}
+
 /*
 	chart.js Rendering
-
 	item[0].cells[0] == <th scope="row" class="sorting_1">1</th>
 	item[0].cells[1] == <td>직장인을 위한 실무 엑셀</td>
 	item[0].cells[2] == <td>9791160500790</td>
@@ -81,8 +130,8 @@ function setBarDatas(item){
 
 	for (var i = 0; i < item.length; i++) {
 		//strRank.push(item[i].cells[0].innerText);
-		strTitle.push(item[i].cells[1].innerText);
-		strSellingPoint.push(item[i].cells[7].innerText);
+		strTitle.push(item[i].cells[2].innerText);
+		strSellingPoint.push(item[i].cells[8].innerText);
 	}
 
 	var result = [strSellingPoint, strTitle];
@@ -92,7 +141,7 @@ function setBarDatas(item){
 function setDonutDatas(item){
 	pubValues = {};
 	for (var i = 0; i < item.length; i++) {
-		nowPubName = item[i].cells[4].innerText;
+		nowPubName = item[i].cells[5].innerText;
 		if(pubValues[nowPubName] == undefined){
 			pubValues[nowPubName] = 1;
 		}else{
@@ -131,7 +180,7 @@ function drawBarChart(resultBarDatas, resultBarColors) {
 						autoSkip: false,
 						maxRotation: 90,
 						minRotation: 90,
-						fontSize: 14,
+						fontSize: 12,
 					}
 				}]
 			}
@@ -162,21 +211,6 @@ function drawDonutChart(strPublisherName, resultDonutDatas, resultDonutColors) {
 			}],
 		},
 		options: {
-			tooltips: {
-				callbacks: {
-					label: function(tooltipItem, data) {
-						var allData = data.datasets[tooltipItem.datasetIndex].data;
-						var tooltipLabel = data.labels[tooltipItem.index];
-						var tooltipData = allData[tooltipItem.index];
-						var total = 0;
-						for (var i in allData) {
-							total += allData[i];
-						}
-						var tooltipPercentage = Math.round((tooltipData / total) * 100);
-						return tooltipLabel + ': ' + tooltipData + ' (' + tooltipPercentage + '%)';
-					}
-				}
-			},
 		},
 	});
 

@@ -1,12 +1,7 @@
-body{
-    padding: 70px;
+td.details-control {
+    background: url('/static/image/details_open.png') no-repeat center center;
+    cursor: pointer;
 }
-
-#content > nav > div > div.navbar-header > a > img{
-    margin-top: -10px;
-    margin-bottom: 10px;
-}
-
-#content > div.low-button-group{
-    margin-bottom: 5px;
+tr.shown td.details-control {
+    background: url('/static/image/details_close.png') no-repeat center center;
 }

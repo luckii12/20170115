@@ -1,0 +1,4 @@
+{
+    "python.pythonPath": "${workspaceFolder}/django_1/bin/python",
+    "python.linting.enabled": false
+}
