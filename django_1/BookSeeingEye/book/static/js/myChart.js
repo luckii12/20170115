@@ -180,7 +180,7 @@ function drawBarChart(resultBarDatas, resultBarColors) {
 						autoSkip: false,
 						maxRotation: 90,
 						minRotation: 90,
-						fontSize: 14,
+						fontSize: 12,
 					}
 				}]
 			}
