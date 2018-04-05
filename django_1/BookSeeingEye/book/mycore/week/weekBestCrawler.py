@@ -40,7 +40,6 @@ def getDriver():
             '/Users/canine/DEV/20170114/django_1/BookSeeingEye/book/driver/chromedriver.exe', chrome_options=options)
     return driver
 
-
 def startCrawl(page, driver):
     if driver == None:
         print('driver is not found')
@@ -52,7 +51,6 @@ def startCrawl(page, driver):
         for pageCount in range(1, page + 1):
             pageCrawl(pageCount, driver)
 
-
 def endCrawl(driver):
     if driver == None:
         print('driver is not found')
@@ -61,7 +59,6 @@ def endCrawl(driver):
         print('크롤러를 종료합니다.')
         driver.close()
         return 0
-
 
 def ORM_saveBook(book):
 	'''
@@ -77,6 +74,7 @@ def ORM_saveBook(book):
 				reviewCount=book['Review'],
 				sellingPoint=book['SellingPoint'],
 				crawl_date=timezone.localtime(),
+                bookUrl=book['bookUrl'],
 				book=temp
 			)
 		except:
@@ -85,6 +83,7 @@ def ORM_saveBook(book):
 				reviewCount=book['Review'],
 				sellingPoint=book['SellingPoint'],
 				crawl_date=timezone.localtime(),
+                bookUrl=book['bookUrl'],
 				book=Book.objects.create(
 					title=book['Title'],
 					isbn=int(book['ISBN']),
@@ -96,7 +95,6 @@ def ORM_saveBook(book):
 					category=book['Category'],
 				)
 			)
-
 
 def pageCrawl(page, driver):
     if(driver == None):
@@ -112,6 +110,7 @@ def pageCrawl(page, driver):
             temp['Rank'] = i + (page - 1) * 20
             item = driver.find_element_by_xpath(
                 '//*[@id="category_layout"]/tbody/tr[' + pos + ']/td[3]/p[1]/a[1]')
+            temp['bookUrl'] = item.get_attribute('href')
             temp['Title'] = item.text
             temp['Writer'] = driver.find_element_by_xpath(
                 '//*[@id="category_layout"]/tbody/tr[' + pos + ']/td[3]/div/a[1]').text
@@ -166,25 +165,43 @@ def pageCrawl(page, driver):
         ...
 '''
 
-
 def getTodayEdge():
     return getTodayStart() + timezone.timedelta(hours=23, minutes=59, seconds=59)
-
 
 def getTodayStart():
     return timezone.localtime() - timezone.timedelta(hours=timezone.localtime().hour, minutes=timezone.localtime().minute, seconds=timezone.localtime().second)
 
-
 def getYesterdayEdge():
     return getTodayStart() - timezone.timedelta(seconds=1)
-
 
 def getYesterdayStart():
     return getTodayStart() - timezone.timedelta(days=1)
 
-
 def getBookList(start, end):
     return MetaData.objects.filter(crawl_date__range=(start, end))
+
+def getTodayBookList():
+    temp = []
+    try:
+        book = getBookList(getTodayStart(), getTodayEdge())
+        for item in book:
+            temp_dic = {}
+            temp_dic['rank'] = item.rank
+            temp_dic['rank_rise_and_fall'] = item.rankRiseAndFall
+            temp_dic['title'] = item.book.title
+            temp_dic['isbn'] = item.book.isbn
+            temp_dic['author'] = item.book.author
+            temp_dic['publisher'] = item.book.publisher
+            temp_dic['price'] = item.book.price
+            temp_dic['review_count'] = item.reviewCount
+            temp_dic['selling_point'] = item.sellingPoint
+            temp_dic['pub_date'] = item.book.pubDate
+            temp_dic['category'] = item.book.category
+            temp.append(temp_dic)
+    except:
+        pass
+
+    return temp
 
 
 def getBookMetaDataList(user_isbn):
@@ -196,13 +213,13 @@ def getBookMetaDataList(user_isbn):
             temp_dic['date'] = item.crawl_date.date()
             temp_dic['rank'] = item.rank
             temp_dic['sp'] = item.sellingPoint
+            temp_dic['url'] = item.bookUrl
             temp.append(temp_dic)
     except:
         # 누른 책이 없는 책일 수는 없기는 함
         pass
 
     return temp
-
 
 '''
     어제 오늘의 rank를 비교하여 Model의 rankRiseAndFall 값에 저장한다.
@@ -216,8 +233,6 @@ def getBookMetaDataList(user_isbn):
                 - 새로운 책이거나
                 - 순위가 바뀐 책임
 '''
-
-
 def setRankRiseAndFall(today_list, yesterday_list):
     for item in today_list:
         try:

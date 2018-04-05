@@ -37,11 +37,12 @@ $(document).ready(function () {
 			// 받은 데이터는 여기에 붙입니다.
 			success: function (data) {
 				$('body > div > div > div.right_col > div:nth-child(4) > div:nth-child(2) > div > div.x_content > table > tbody > tr:nth-child(2) > td').text('');
-				// console.log(data['metadata'].length);
 				var temp_bookRank = [];
 				var temp_bookDate = [];
-				var temp_bookSP = [];
-				for (var i = 0; i < data['metadata'].length; i++) {
+                var temp_bookSP = [];
+                
+                now_len = data['metadata'].length
+				for (var i = 0; i < now_len; i++) {
 					// console.log(data['metadata'][i]);
 					var appendData = '<li>' + data['metadata'][i]['date'] + ' - ' + data['metadata'][i]['rank'] + '</li>';
 					$('#bookRankGraph').append(appendData);
@@ -51,11 +52,10 @@ $(document).ready(function () {
 				}
 
 				var temp_bookInfo = [temp_bookRank, temp_bookDate, temp_bookSP];
-				console.log(temp_bookInfo);
 
 				if (myBookInfoGraph == undefined) {
 					myBookInfoGraph = drawBookInfoGraph(temp_bookInfo, temp_bookRank);
-					myBookSPGraph = drawSPInfoGraph(temp_bookInfo, temp_bookSP);
+					myBookSPGraph = drawSPInfoGraph(temp_bookInfo);
 				} else {
 					myBookInfoGraph.data.datasets[0].data = temp_bookRank;
 					myBookInfoGraph.data.labels = temp_bookDate;
@@ -65,7 +65,8 @@ $(document).ready(function () {
 
 					myBookInfoGraph.update();
 					myBookSPGraph.update();
-				}
+                }
+                // window.open(data['metadata'][now_len - 1]['url'], '', 'width=1000, height=800');
 			}
 		});
 
@@ -75,7 +76,7 @@ $(document).ready(function () {
 	});
 });
 
-function drawSPInfoGraph(resultGraphDatas, resultGraphColors) {
+function drawSPInfoGraph(resultGraphDatas) {
 	var ctx = $("#week_bookinfo_graph2");
 	var myGraph = new Chart(ctx, {
 		//차트 타입
@@ -130,7 +131,7 @@ function drawBookInfoGraph(resultGraphDatas, resultGraphColors) {
 				// 차트 라벨과 함께 보여질 라벨 '#'에 labels가 하나씩 들어감
 				label: '순위',
 				//각 값은 labels에 대입된다.
-				data: resultGraphDatas[0].reverse(),
+				data: resultGraphDatas[0],
 				borderColor: "#3cba9f",
 				fill: false
 			}]

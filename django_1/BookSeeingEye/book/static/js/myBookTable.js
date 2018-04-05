@@ -1,7 +1,10 @@
-$(document).ready();
+$(document).ready(function(){
+    $('#get_whole_table_data').click(tableInitialize());
+});
 
 function tableInitialize() {
-	ajaxInit();
+    ajaxInit();
+    callWholeTableInfo();
 }
 
 function callWholeTableInfo() {
@@ -32,11 +35,12 @@ function callWholeTableInfo() {
 	*/
 
 	$.ajax({
-		url: '/getBook/',
+		url: '/getTodayBooks/',
 		type: 'post',
 		data: {},
 		success: function (data) {
-
+			// 여기에서 테이블을 그리면 됩니다.
+			console.log(data['todaybooklist']);
 		}
 	});
 }

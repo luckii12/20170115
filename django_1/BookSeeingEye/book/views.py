@@ -5,7 +5,7 @@ from django.http import HttpResponse
 from .mycore.week import weekBestCrawler
 from django.utils import timezone
 from django.contrib.auth.models import User  					# 장고 User 모델을 사용하는 듯
-from django.contrib.auth import login, authenticate  	# 장고 로그인
+from django.contrib.auth import login, authenticate  			# 장고 로그인
 from django.http import JsonResponse
 
 def get_books(request):
@@ -16,11 +16,13 @@ def get_books(request):
 		weekBestCrawler.endCrawl(driver)
 	return redirect('index')
 
-def get_whole_books(request):
-	pass
+# ajax로 전달할 오늘의 모든 책 리스트
+def get_today_books(request):
+	data = weekBestCrawler.getTodayBookList()
+	return JsonResponse({'todaybooklist': data})
 
+# 책 1권의 메타데이터의 리스트를 몽땅 가져온다.
 def get_book(request):
-    # print('책 클릭 리퀘스트: ' + str(request.POST))
     data = weekBestCrawler.getBookMetaDataList(str(request.POST['isbn']))
     return JsonResponse({'metadata': data})
 
